@@ -21,6 +21,11 @@ final class InMemoryLoanRepository implements LoanRepository
         return $this->loans[$id] ?? null;
     }
 
+    public function count(): int
+    {
+        return count($this->loans);
+    }
+
     public function add(Loan $loan): void
     {
         $this->loans[$loan->id()] = $loan;
