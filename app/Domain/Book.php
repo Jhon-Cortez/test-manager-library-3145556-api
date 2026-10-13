@@ -109,7 +109,6 @@ final class Book
         $this->categoryId = $categoryId;
         $this->totalCopies = $total->value();
         $this->availableCopies = $newAvailable;
-        $this->version++;
     }
 
     public function withdraw(): void
@@ -119,7 +118,6 @@ final class Book
         }
 
         $this->availableCopies--;
-        $this->version++;
     }
 
     public function restock(): void
@@ -129,7 +127,6 @@ final class Book
         }
 
         $this->availableCopies++;
-        $this->version++;
     }
 
     public function setCoverKey(string $coverKey): void
@@ -140,13 +137,11 @@ final class Book
         }
 
         $this->coverKey = $coverKey;
-        $this->version++;
     }
 
     public function clearCover(): void
     {
         $this->coverKey = null;
-        $this->version++;
     }
 
     public function markDeleted(DateTimeImmutable $now): void
@@ -156,7 +151,6 @@ final class Book
         }
 
         $this->deletedAt = $now;
-        $this->version++;
     }
 
     public function id(): string

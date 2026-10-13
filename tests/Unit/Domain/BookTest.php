@@ -35,6 +35,15 @@ final class BookTest extends TestCase
         self::assertSame(1, $book->version());
     }
 
+    public function test_mutations_keep_the_load_time_version_token(): void
+    {
+        $book = $this->makeBook(2);
+        $book->withdraw();
+        $book->restock();
+
+        self::assertSame(1, $book->version());
+    }
+
     public function test_total_must_be_at_least_one(): void
     {
         $this->expectException(InvalidValue::class);
@@ -49,14 +58,13 @@ final class BookTest extends TestCase
         Book::create('book-1', '   ', 'Autor', Isbn::of('9780307474728'), 'cat-1', Quantity::of(1));
     }
 
-    public function test_withdraw_decrements_and_bumps_version(): void
+    public function test_withdraw_decrements_available(): void
     {
         $book = $this->makeBook(1);
 
         $book->withdraw();
 
         self::assertSame(0, $book->availableCopies());
-        self::assertSame(2, $book->version());
     }
 
     public function test_available_never_goes_below_zero(): void
