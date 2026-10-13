@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Adapters\Inbound\Http;
+namespace App\Adapters\Inbound\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 

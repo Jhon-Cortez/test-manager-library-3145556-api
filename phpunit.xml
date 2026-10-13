@@ -28,6 +28,7 @@
         <env name="CACHE_STORE" value="array"/>
         <env name="DB_CONNECTION" value="pgsql"/>
         <env name="DB_URL" value="postgresql://library:library@db:5432/library"/>
+        <env name="JWT_SECRET" value="secret-de-pruebas-largo-y-aleatorio"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>

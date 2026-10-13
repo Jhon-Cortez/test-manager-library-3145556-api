@@ -31,11 +31,11 @@ final class SecurityAdaptersTest extends TestCase
         $user = User::register('99999999-aaaa-4aaa-8aaa-999999999999', 'ana', 'hashed:secret', Role::Librarian);
         $expiresAt = new DateTimeImmutable('+8 hours');
 
-        $claims = $issuer->decode($issuer->issue($user, $expiresAt));
+        $claims = $issuer->parse($issuer->issue($user, $expiresAt));
 
         self::assertSame('99999999-aaaa-4aaa-8aaa-999999999999', $claims['sub']);
         self::assertSame('librarian', $claims['role']);
-        self::assertSame((int) $expiresAt->format('U'), $claims['exp']);
+        self::assertSame(['sub', 'role'], array_keys($claims));
         self::assertArrayNotHasKey('username', $claims);
         self::assertArrayNotHasKey('password', $claims);
     }
