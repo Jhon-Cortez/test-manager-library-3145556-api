@@ -84,7 +84,7 @@ final class InMemoryLoanRepository implements LoanRepository
         return array_keys($found);
     }
 
-    public function search(?DateRange $range, ?LoanStatus $status, ?string $memberId, int $page, int $size): Page
+    public function search(?DateRange $range, ?LoanStatus $status, ?string $memberId, int $page, int $size, DateTimeImmutable $now): Page
     {
         $filtered = [];
         foreach ($this->loans as $loan) {
@@ -94,7 +94,7 @@ final class InMemoryLoanRepository implements LoanRepository
             if ($range !== null && ($loan->loanedAt() < $range->start() || $loan->loanedAt() > $range->end())) {
                 continue;
             }
-            if ($status !== null && $this->statusOf($loan) !== $status) {
+            if ($status !== null && $loan->statusAt($now) !== $status) {
                 continue;
             }
             $filtered[] = $loan;
@@ -125,7 +125,7 @@ final class InMemoryLoanRepository implements LoanRepository
                     'loan_id' => $loan->id(),
                     'item_id' => $item->id(),
                     'book_title' => $item->bookTitle(),
-                    'member_name' => $loan->memberId(),
+                    'member_id' => $loan->memberId(),
                     'due_at' => $item->dueAt(),
                     'days_late' => $item->daysLateAt($now),
                 ];
@@ -135,10 +135,5 @@ final class InMemoryLoanRepository implements LoanRepository
         usort($rows, static fn (array $a, array $b): int => $b['days_late'] <=> $a['days_late']);
 
         return $rows;
-    }
-
-    private function statusOf(Loan $loan): LoanStatus
-    {
-        return $loan->statusAt(new DateTimeImmutable());
     }
 }

@@ -25,8 +25,8 @@ interface LoanRepository
     /** @param string[] $bookIds @return string[] book ids that still hold unreturned lines */
     public function bookIdsWithUnreturnedItems(array $bookIds): array;
 
-    public function search(?DateRange $range, ?LoanStatus $status, ?string $memberId, int $page, int $size): Page;
+    public function search(?DateRange $range, ?LoanStatus $status, ?string $memberId, int $page, int $size, DateTimeImmutable $now): Page;
 
-    /** @return array<int, array{loan_id: string, item_id: string, book_title: string, member_name: string, due_at: DateTimeImmutable, days_late: int}> */
+    /** @return array<int, array{loan_id: string, item_id: string, book_title: string, member_id: string, due_at: DateTimeImmutable, days_late: int}> */
     public function overdueItems(DateTimeImmutable $now): array;
 }
