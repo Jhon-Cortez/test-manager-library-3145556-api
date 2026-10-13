@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Adapters\Outbound\Security;
 
 use App\Application\Ports\Outbound\TokenIssuer;
+use App\Application\Ports\Outbound\TokenParser;
 use App\Domain\User;
 use DateTimeImmutable;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-final class JwtTokenIssuer implements TokenIssuer
+final class JwtTokenIssuer implements TokenIssuer, TokenParser
 {
     public function __construct(private readonly string $secret)
     {
@@ -28,9 +29,13 @@ final class JwtTokenIssuer implements TokenIssuer
         ], $this->secret, 'HS256');
     }
 
-    /** @return array<string, mixed> */
-    public function decode(string $token): array
+    public function parse(string $token): array
     {
-        return (array) JWT::decode($token, new Key($this->secret, 'HS256'));
+        $claims = (array) JWT::decode($token, new Key($this->secret, 'HS256'));
+
+        return [
+            'sub' => (string) $claims['sub'],
+            'role' => (string) $claims['role'],
+        ];
     }
 }

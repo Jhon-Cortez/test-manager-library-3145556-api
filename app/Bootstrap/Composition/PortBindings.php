@@ -23,6 +23,7 @@ use App\Application\Ports\Outbound\MemberRepository;
 use App\Application\Ports\Outbound\PasswordHasher;
 use App\Application\Ports\Outbound\ReportReader;
 use App\Application\Ports\Outbound\TokenIssuer;
+use App\Application\Ports\Outbound\TokenParser;
 use App\Application\Ports\Outbound\UserRepository;
 use Illuminate\Contracts\Foundation\Application;
 
@@ -33,12 +34,20 @@ final class PortBindings
         $app->singleton(Clock::class, static fn (): Clock => new SystemClock());
         $app->singleton(PasswordHasher::class, static fn (): PasswordHasher => new BcryptPasswordHasher());
         $app->singleton(
+            JwtTokenIssuer::class,
+            static fn (): JwtTokenIssuer => new JwtTokenIssuer((string) env('JWT_SECRET')),
+        );
+        $app->singleton(
             TokenIssuer::class,
-            static fn (): TokenIssuer => new JwtTokenIssuer((string) env('JWT_SECRET')),
+            static fn (Application $app): TokenIssuer => $app->make(JwtTokenIssuer::class),
         );
         $app->singleton(
             CoverStorage::class,
             static fn (): CoverStorage => new DiskCoverStorage((string) (env('COVERS_DIR') ?: base_path('var/covers'))),
+        );
+        $app->singleton(
+            TokenParser::class,
+            static fn (Application $app): TokenParser => $app->make(JwtTokenIssuer::class),
         );
         $app->singleton(BookRepository::class, static fn (): BookRepository => new EloquentBookRepository());
         $app->singleton(MemberRepository::class, static fn (): MemberRepository => new EloquentMemberRepository());
