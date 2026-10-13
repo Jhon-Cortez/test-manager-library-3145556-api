@@ -40,6 +40,19 @@ final class LoanItem
         );
     }
 
+    public static function reconstitute(
+        string $id,
+        string $loanId,
+        string $bookId,
+        string $bookTitle,
+        Isbn $isbn,
+        string $categoryName,
+        DateTimeImmutable $dueAt,
+        ?DateTimeImmutable $returnedAt,
+    ): self {
+        return new self($id, $loanId, $bookId, $bookTitle, $isbn, $categoryName, $dueAt, $returnedAt);
+    }
+
     public function markReturned(DateTimeImmutable $now): void
     {
         if ($this->returnedAt !== null) {

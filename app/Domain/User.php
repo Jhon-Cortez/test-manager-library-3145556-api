@@ -30,6 +30,11 @@ final class User
         return new self($id, $username, $passwordHash, $role);
     }
 
+    public static function reconstitute(string $id, string $username, string $passwordHash, Role $role): self
+    {
+        return new self($id, $username, $passwordHash, $role);
+    }
+
     public static function normalize(string $username): string
     {
         return strtolower(trim($username));

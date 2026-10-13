@@ -58,6 +58,32 @@ final class Book
         );
     }
 
+    public static function reconstitute(
+        string $id,
+        string $title,
+        string $author,
+        Isbn $isbn,
+        string $categoryId,
+        int $totalCopies,
+        int $availableCopies,
+        ?string $coverKey,
+        ?DateTimeImmutable $deletedAt,
+        int $version,
+    ): self {
+        return new self(
+            $id,
+            $title,
+            $author,
+            $isbn,
+            $categoryId,
+            $totalCopies,
+            $availableCopies,
+            $coverKey,
+            $deletedAt,
+            $version,
+        );
+    }
+
     public function update(string $title, string $author, string $categoryId, Quantity $total): void
     {
         $title = trim($title);

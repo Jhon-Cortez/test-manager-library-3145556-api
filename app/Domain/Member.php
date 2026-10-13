@@ -25,6 +25,11 @@ final class Member
         return new self($id, $fullName, $documentNumber);
     }
 
+    public static function reconstitute(string $id, string $fullName, DocumentNumber $documentNumber): self
+    {
+        return new self($id, $fullName, $documentNumber);
+    }
+
     public function id(): string
     {
         return $this->id;

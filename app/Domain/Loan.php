@@ -34,6 +34,20 @@ final class Loan
         return new self($id, $memberId, $loanedByUserId, $loanedAt);
     }
 
+    /** @param LoanItem[] $items */
+    public static function reconstitute(
+        string $id,
+        string $memberId,
+        string $loanedByUserId,
+        DateTimeImmutable $loanedAt,
+        array $items,
+    ): self {
+        $loan = new self($id, $memberId, $loanedByUserId, $loanedAt);
+        $loan->items = $items;
+
+        return $loan;
+    }
+
     public function addItem(string $itemId, Book $book, string $categoryName): LoanItem
     {
         if (count($this->items) >= self::MAX_ITEMS) {
